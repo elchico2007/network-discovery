@@ -25,9 +25,15 @@ def get_lldp_neigh(ip):
 
     device_con.open()
 
-    device_facts = { device: device_con.get_lldp_neighbors() }
+    device_facts = device_con.get_lldp_neighbors()
 
-    print(device_facts)
+    for entry in device_facts:
+        for neighbor in device_facts[entry]:
+            print(neighbor)
+
+    device_con.close()
+
+    print(json.dumps(device_facts, indent=2))
 
 get_lldp_neigh(device)
 
