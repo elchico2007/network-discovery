@@ -7,7 +7,7 @@ driver = get_network_driver('ios')
 
 #devices = ['192.168.1.1', '192.168.1.2']
 
-device = '192.168.1.1'
+device = 'cisco1'
 
 lldp_devices = []
 
@@ -31,10 +31,10 @@ def get_lldp_neigh(ip):
 
     for entry in device_facts:
         for neighbor in device_facts[entry]:
-            local_neighbors.append(neighbor['hostname'])
+            local_neighbors.append(neighbor['hostname'].replace('.testing', ''))
             local_interfaces.append(entry)
     
-    lldp_device['Host'] = device
+    lldp_device['host'] = device
     lldp_device['neighbors_hostname'] = local_neighbors
     lldp_device['interfaces'] = local_interfaces
 
@@ -43,4 +43,15 @@ def get_lldp_neigh(ip):
 
     return lldp_device
 
-print(get_lldp_neigh(device))
+lldp_devices = [ get_lldp_neigh(device) ]
+
+def lldp_discovery():
+
+    all_lldp_names = []
+
+    for router in range(len(lldp_devices)):
+        rtr_name = lldp_devices[router]['neighbors_hostname']
+        all_lldp_names.append(rtr_name)
+        print(all_lldp_names)
+
+lldp_discovery()
