@@ -1,0 +1,44 @@
+[
+  {
+    "host": "cisco4",
+    "neighbors_hostname": [
+      "cisco1"
+    ],
+    "interfaces": [
+      "GigabitEthernet1/1"
+    ]
+  },
+  {
+    "host": "cisco1",
+    "neighbors_hostname": [
+      "cisco4",
+      "cisco3",
+      "cisco2"
+    ],
+    "interfaces": [
+      "GigabitEthernet1/0",
+      "GigabitEthernet0/2",
+      "GigabitEthernet0/0"
+    ]
+  },
+  {
+    "host": "cisco2",
+    "neighbors_hostname": [
+      "cisco3",
+      "cisco1"
+    ],
+    "interfaces": [
+      "GigabitEthernet0/2",
+      "GigabitEthernet0/0"
+    ]
+  },
+  {
+    "host": "cisco3",
+    "neighbors_hostname": [
+      "cisco1"
+    ],
+    "interfaces": [
+      "GigabitEthernet0/0"
+    ]
+  }
+]
