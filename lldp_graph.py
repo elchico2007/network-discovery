@@ -11,7 +11,7 @@ device = 'cisco1'
 
 lldp_devices = []
 
-def get_lldp_neigh(ip):
+def get_lldp_neigh(device):
 
     local_interfaces = []
     local_neighbors = []
@@ -38,6 +38,8 @@ def get_lldp_neigh(ip):
     lldp_device['neighbors_hostname'] = local_neighbors
     lldp_device['interfaces'] = local_interfaces
 
+    #print(lldp_devices)
+
     if device not in lldp_devices:
         lldp_devices.append(lldp_device)
 
@@ -52,6 +54,30 @@ def lldp_discovery():
     for router in range(len(lldp_devices)):
         rtr_name = lldp_devices[router]['neighbors_hostname']
         all_lldp_names.append(rtr_name)
-        print(all_lldp_names)
+    
+    lldp_devices_needing_query = []
+
+    for device in all_lldp_names[0]:
+        for current_lldp_devices in lldp_devices:
+            if device != current_lldp_devices['host']:
+                lldp_devices_needing_query.append(device)
+
+    for device in lldp_devices_needing_query:
+        for current_device in range(len(lldp_devices)):
+            for index, entry in enumerate(lldp_devices[current_device]['neighbors_hostname']):
+                if device != entry:
+                    new_dev_to_query = lldp_devices[current_device]['neighbors_hostname'][index]
+                    get_lldp_neigh(new_dev_to_query)
+                else:
+                    pass
+    all_devices = []
+
+    for device in lldp_devices:
+        if device not in all_devices:
+            all_devices.append(device)
+
+    return all_devices
 
 lldp_discovery()
+
+print(lldp_devices)
