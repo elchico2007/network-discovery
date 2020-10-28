@@ -35,7 +35,7 @@ def get_lldp_neigh(ip):
             local_interfaces.append(entry)
     
     lldp_device['Host'] = device
-    lldp_device['neighbors_name'] = local_neighbors
+    lldp_device['neighbors_hostname'] = local_neighbors
     lldp_device['interfaces'] = local_interfaces
 
     if device not in lldp_devices:
