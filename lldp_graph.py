@@ -15,7 +15,7 @@ def get_lldp_neigh(ip):
 
     local_interfaces = []
     local_neighbors = []
-    lldp_devices = {}
+    lldp_device = {}
 
     username = 'admin'
     password = 'admin'
@@ -27,13 +27,20 @@ def get_lldp_neigh(ip):
 
     device_facts = device_con.get_lldp_neighbors()
 
-    for entry in device_facts:
-        for neighbor in device_facts[entry]:
-            print(neighbor)
-
     device_con.close()
 
-    print(json.dumps(device_facts, indent=2))
+    for entry in device_facts:
+        for neighbor in device_facts[entry]:
+            local_neighbors.append(neighbor['hostname'])
+            local_interfaces.append(entry)
+    
+    lldp_device['Host'] = device
+    lldp_device['neighbors_name'] = local_neighbors
+    lldp_device['interfaces'] = local_interfaces
 
-get_lldp_neigh(device)
+    if device not in lldp_devices:
+        lldp_devices.append(lldp_device)
 
+    return lldp_device
+
+print(get_lldp_neigh(device))
