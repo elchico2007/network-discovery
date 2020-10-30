@@ -2,21 +2,15 @@
 from napalm import get_network_driver
 import json
 
-# importing driver for cisco
-driver = get_network_driver('ios')
-
-# specifying root device from which we will begin to search
-root_device = 'cisco4'
-
-# setting lldp devices to an empty list
-lldp_devices = []
-
 def get_lldp_neighbors(device):
 
     local_interfaces = []
     local_neighbors = []
     lldp_device = {}
-
+    
+    # importing driver for cisco
+    driver = get_network_driver('ios')
+    
     # specifying authentication vars
     username = 'admin'
     password = 'admin'
@@ -52,9 +46,6 @@ def get_lldp_neighbors(device):
     # return dictionary
     return lldp_device
 
-# converting each entry to an item in a list
-lldp_devices = [ get_lldp_neighbors(root_device) ]
-
 def lldp_discovery():
 
     all_lldp_names = []
@@ -73,7 +64,7 @@ def lldp_discovery():
     for device in lldp_devices_needing_query:
         get_lldp_neighbors(device)
 
-def extend_neighbor_discovery(lldp_devices):
+def extend_neighbor_discovery():
     all_neighbors = []
     all_discovered_neighbors = []
 
@@ -94,10 +85,25 @@ def extend_neighbor_discovery(lldp_devices):
         if device not in all_discovered_neighbors:
             get_lldp_neighbors(device)
 
-# execute lldp_discovery
-lldp_discovery()
 
-# execute extended function to find not directly connected neighbors
-extend_neighbor_discovery(lldp_devices)
+def main():
+    # specifying root device from which we will begin to search
+    root_device = 'cisco4'
+    
+    # setting lldp devices to an empty list and setting it to be in the global namespace
+    global lldp_devices
+    lldp_devices = []
 
-print(json.dumps(lldp_devices, indent=2))
+    # converting each entry to an item in a list
+    lldp_devices = [ get_lldp_neighbors(root_device) ]
+
+    # execute lldp_discovery
+    lldp_discovery()
+
+    # execute extended function to find not directly connected neighbors
+    extend_neighbor_discovery(lldp_devices)
+
+    print(json.dumps(lldp_devices, indent=2))
+
+if __name__ == '__main__':
+    main()
