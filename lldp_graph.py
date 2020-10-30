@@ -101,7 +101,7 @@ def main():
     lldp_discovery()
 
     # execute extended function to find not directly connected neighbors
-    extend_neighbor_discovery(lldp_devices)
+    extend_neighbor_discovery()
 
     print(json.dumps(lldp_devices, indent=2))
 
