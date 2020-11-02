@@ -49,6 +49,8 @@ def get_lldp_neighbors(device):
 def lldp_discovery():
 
     all_lldp_names = []
+    all_devices = []
+    all_discovered_neighbors = []
 
     for router in range(len(lldp_devices)):
         rtr_name = lldp_devices[router]['neighbors_hostname']
@@ -64,24 +66,28 @@ def lldp_discovery():
     for device in lldp_devices_needing_query:
         get_lldp_neighbors(device)
 
+    print('all lldp names', all_lldp_names)
+
 def extend_neighbor_discovery():
-    all_neighbors = []
+    all_devices = []
     all_discovered_neighbors = []
 
     for device in lldp_devices:
-        all_neighbors.append(device['neighbors_hostname'])
+        all_devices.append(device['neighbors_hostname'])
 
     for discovered_device in lldp_devices:
         all_discovered_neighbors.append(discovered_device['host'])
     
     # flatten list to be a single list
-    all_neighbors = [ item for sublist in all_neighbors for item in sublist ]
+    all_devices = [ item for sublist in all_devices for item in sublist ]
 
     # removing duplicates
-    all_neighbors = list(set(all_neighbors))
+    all_devices = list(set(all_devices))
+
+    print('All neighbors', all_devices)
     
     # executing get_lldp_neighbors function if there are undiscovered neighbors
-    for device in all_neighbors:
+    for device in all_devices:
         if device not in all_discovered_neighbors:
             get_lldp_neighbors(device)
 
