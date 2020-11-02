@@ -49,22 +49,27 @@ def get_lldp_neighbors(device):
 def lldp_discovery():
 
     all_lldp_names = []
-
-    for router in range(len(lldp_devices)):
-        rtr_name = lldp_devices[router]['neighbors_hostname']
-        all_lldp_names.append(rtr_name)
-    
     lldp_devices_needing_query = []
 
+    # Looping over current list of devices
+    for router in range(len(lldp_devices)):
+        # making rtr_name to be the hostname of each neighbor
+        rtr_name = lldp_devices[router]['neighbors_hostname']
+        # append the rtr_name to the list
+        all_lldp_names.append(rtr_name)
+
+    # looping over all device names
     for device in all_lldp_names[0]:
+        # loop over global device list
         for current_lldp_devices in lldp_devices:
+            # determining if device is not in list
             if device != current_lldp_devices['host']:
                 lldp_devices_needing_query.append(device)
 
     for device in lldp_devices_needing_query:
         get_lldp_neighbors(device)
 
-def extend_neighbor_discovery():
+def non_direct_discovery():
     all_devices = []
     all_discovered_neighbors = []
 
@@ -114,7 +119,7 @@ def main():
     lldp_discovery()
 
     # execute extended function to find not directly connected neighbors
-    extend_neighbor_discovery()
+    non_direct_discovery()
 
     lldp_devices = formatting_lldp_list()
 
