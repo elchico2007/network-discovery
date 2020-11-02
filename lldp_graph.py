@@ -87,6 +87,18 @@ def extend_neighbor_discovery():
         if device not in all_discovered_neighbors:
             get_lldp_neighbors(device)
 
+def formatting_lldp_list():
+    formatted_neighbors = {}
+
+    for device in lldp_devices:
+        for index, neighbor in enumerate(device['neighbors_hostname']):
+            # Creating a tuple with host and neighbor connection
+            every_tuple = (device['host'], device['neighbors_hostname'][index])
+            # for every tuple adding in interface connection
+            formatted_neighbors[every_tuple] = device['interfaces'][index]
+
+    return formatted_neighbors
+
 def main():
     # specifying root device from which we will begin to search
     root_device = 'cisco4'
@@ -104,7 +116,9 @@ def main():
     # execute extended function to find not directly connected neighbors
     extend_neighbor_discovery()
 
-    print(json.dumps(lldp_devices, indent=2))
+    lldp_devices = formatting_lldp_list()
+
+    print(json.dumps(str(lldp_devices), indent=2))
 
 if __name__ == '__main__':
     main()
