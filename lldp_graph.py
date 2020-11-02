@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from napalm import get_network_driver
-import json
+from pprint import pprint
 
 def get_lldp_neighbors(device):
 
@@ -118,7 +118,7 @@ def main():
 
     lldp_devices = formatting_lldp_list()
 
-    print(json.dumps(str(lldp_devices), indent=2))
+    pprint(lldp_devices)
 
 if __name__ == '__main__':
     main()
