@@ -112,7 +112,7 @@ def generate_graph(neighborships):
     G = networkx.Graph()
 
     # use the tuples to form the edges
-    G.add_edges_from(neighborships.keys())
+    G.add_edges_from(neighborships.keys(), weight=3)
 
     # laying out a spring layout
     pos = networkx.spring_layout(G, k=0.1, iterations=70)
@@ -121,20 +121,19 @@ def generate_graph(neighborships):
     networkx.draw_networkx_labels(G, pos, font_size=9, font_family='sans-serif', font_weight='bold')
 
     # Choosing width and edge_color
-    networkx.draw_networkx_edges(G, pos, width=4, alpha=0.4, edge_color='black')
-
+    networkx.draw_networkx_edges(G, pos, width=5, alpha=1.0, edge_color='blue')
     # Setting our edge labels
-    networkx.draw_networkx_edge_labels(G, pos, neighborships, label_pos=0.3, font_size=6)
+    networkx.draw_networkx_edge_labels(G, pos, neighborships, label_pos=0.3, font_size=8)
 
     # Drawing the graph
-    networkx.draw(G, pos, node_size=700, with_labels=False)
+    networkx.draw(G, pos, node_size=2000, with_labels=False, edgecolors='black')
     
     # set the function to return a graph
     return matplotlib.pyplot.show()
 
 def main():
     # specifying root device from which we will begin to search
-    root_device = 'cisco4'
+    root_device = 'cisco3'
     
     # setting lldp devices to an empty list and setting it to be in the global namespace
     global lldp_devices
@@ -150,6 +149,8 @@ def main():
     non_direct_discovery()
 
     lldp_devices = formatting_lldp_list()
+
+    pprint(lldp_devices)
 
     generate_graph(lldp_devices)
 
