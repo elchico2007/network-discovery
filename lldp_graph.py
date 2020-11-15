@@ -133,7 +133,7 @@ def generate_graph(neighborships):
 
 def main():
     # specifying root device from which we will begin to search
-    root_device = 'cisco3'
+    root_device = input("What is the root device name or ip? ")
     
     # setting lldp devices to an empty list and setting it to be in the global namespace
     global lldp_devices
