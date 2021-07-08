@@ -2,9 +2,10 @@
 from napalm import get_network_driver
 import matplotlib
 import networkx
+from getpass import getpass
 from pprint import pprint
 
-def get_lldp_neighbors(device):
+def get_lldp_neighbors(device, user, passw, enable):
 
     local_interfaces = []
     local_neighbors = []
@@ -14,12 +15,10 @@ def get_lldp_neighbors(device):
     driver = get_network_driver('ios')
     
     # specifying authentication vars
-    username = 'admin'
-    password = 'admin'
-    optional = {'secret': 'admin'}
+    optional = {'secret': enable}
 
     # establishing connection parameters
-    device_con = driver(device, username, password, optional_args=optional )
+    device_con = driver(device, user, passw, optional_args=optional )
 
     # opening SSH connection
     device_con.open()
@@ -134,13 +133,16 @@ def generate_graph(neighborships):
 def main():
     # specifying root device from which we will begin to search
     root_device = input("What is the root device name or ip? ")
+    username = input("What is the username? ")
+    password = getpass("What is the password? ")
+    enable = getpass("What is the enable password password? ")
     
     # setting lldp devices to an empty list and setting it to be in the global namespace
     global lldp_devices
     lldp_devices = []
 
     # converting each entry to an item in a list
-    lldp_devices = [ get_lldp_neighbors(root_device) ]
+    lldp_devices = [ get_lldp_neighbors(root_device, username, password, enable) ]
 
     # execute lldp_discovery
     lldp_discovery()
